@@ -22,11 +22,14 @@ async function main(text, res) {
       content,
     }));
 
-    messages.push({ role: "user", content: text + ". Vastaa minulle vain Suomeksi!" });
+    messages.push({
+      role: "user",
+      content: text + ". Vastaa minulle vain Suomeksi!",
+    });
 
     const completion = await openai.chat.completions.create({
       messages: messages,
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
     });
 
     const completedText = completion.choices[0].message.content;
@@ -43,8 +46,13 @@ async function main(text, res) {
     });
 
     const englishTranslation = await openai.chat.completions.create({
-      messages: [{ role: "user", content: `Please provide a literal English translation of this text: ${completedText}` }],
-      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `Please provide a literal English translation of this text: ${completedText}`,
+        },
+      ],
+      model: "gpt-4o-mini",
     });
 
     const englishText = englishTranslation.choices[0].message.content;
@@ -60,31 +68,35 @@ async function main(text, res) {
 
     // Send the payload to the other server
     const options = {
-      hostname: 'localhost',
-      port: 3000,
-      path: '/your-endpoint-path', // Adjust this path as needed
-      method: 'POST',
+      hostname: "localhost",
+      port: 3001,
+      path: "/your-endpoint-path", // Adjust this path as needed
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': payload.length,
+        "Content-Type": "application/json",
+        "Content-Length": payload.length,
       },
     };
 
     const req = http.request(options, (response) => {
       console.log(`statusCode: ${response.statusCode}`);
-      response.on('data', (d) => {
+      response.on("data", (d) => {
         process.stdout.write(d);
       });
     });
 
-    req.on('error', (error) => {
+    req.on("error", (error) => {
       console.error(error);
     });
 
     req.write(payload);
     req.end();
 
-    res.json({ text: completedText, translation: englishText, audio: buffer.toString("base64") });
+    res.json({
+      text: completedText,
+      translation: englishText,
+      audio: buffer.toString("base64"),
+    });
   } catch (error) {
     console.error("Error processing request:", error);
     res.status(500).send("Server error");
@@ -96,6 +108,6 @@ app.post("/", (req, res) => {
   main(text, res);
 });
 
-app.listen(5000, () => {
+app.listen(4000, () => {
   console.log("Server is Running");
 });
