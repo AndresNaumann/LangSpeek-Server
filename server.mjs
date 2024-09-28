@@ -24,7 +24,7 @@ async function main(text, res) {
 
     messages.push({
       role: "user",
-      content: text + ". Vastaa minulle vain Suomeksi!",
+      content: text + ". Respond in the language that the previous sentence uses!",
     });
 
     const completion = await openai.chat.completions.create({
@@ -49,7 +49,7 @@ async function main(text, res) {
       messages: [
         {
           role: "user",
-          content: `Please provide a literal English translation of this text: ${completedText}`,
+          content: `Please provide a literal English translation of this text and nothing else: ${completedText}`,
         },
       ],
       model: "gpt-4o-mini",
@@ -69,7 +69,7 @@ async function main(text, res) {
     // Send the payload to the other server
     const options = {
       hostname: "localhost",
-      port: 3001,
+      port: 3000,
       path: "/your-endpoint-path", // Adjust this path as needed
       method: "POST",
       headers: {
