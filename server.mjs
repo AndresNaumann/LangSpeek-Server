@@ -24,7 +24,7 @@ async function main(text, res) {
 
     messages.push({
       role: "user",
-      content: text + ". Respond in the language that the previous sentence uses. Keep the response to one parapgraph. Correct my grammar if it is wrong.",
+      content: text + ". Respond in the language that the previous sentence uses. Keep the response very brief.",
     });
 
     const completion = await openai.chat.completions.create({
