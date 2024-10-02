@@ -24,12 +24,14 @@ async function main(text, res) {
 
     messages.push({
       role: "user",
-      content: text + ". Respond in the language that the previous sentence uses. Keep the response very brief.",
+      content:
+        text +
+        ". Respond in the language that the previous sentence uses. Keep the response very brief.",
     });
 
     const completion = await openai.chat.completions.create({
       messages: messages,
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
     });
 
     const completedText = completion.choices[0].message.content;
@@ -69,7 +71,7 @@ async function main(text, res) {
     // Send the payload to the other server
     const options = {
       hostname: "localhost",
-      port: 3000,
+      port: 3001,
       path: "/your-endpoint-path", // Adjust this path as needed
       method: "POST",
       headers: {
