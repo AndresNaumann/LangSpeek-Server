@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import fs from "fs";
 import path from "path";
+import authenticateToken from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -191,6 +192,10 @@ async function main(text, res) {
 app.post("/", (req, res) => {
   let text = req.body.text;
   main(text, res);
+});
+
+app.get("/api/protected-route", authenticateToken, (req, res) => {
+  res.send(`Hello, ${req.user.email}`);
 });
 
 app.listen(4000, () => {
