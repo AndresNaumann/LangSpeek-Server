@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import http from "http";
 import fs from "fs";
+import path from "path";
 
 dotenv.config();
 
@@ -19,8 +20,29 @@ let messagesLDS = [];
 
 // USE A JSON FILE TO LOAD CONTENT INTO THE CHAT
 
+// use only when needed
+
+// function jsonify(filePath) {
+//   const content = fs.readFileSync(filePath, "utf8");
+
+//   const paragraphs = content.split("\n\n");
+
+//   const jsonData = paragraphs
+//     .filter((p) => p.trim())
+//     .map((p) => ({ role: "system", content: p.trim() }));
+
+//   const outputFilePath = path.basename(filePath, ".txt") + ".json";
+
+//   fs.writeFileSync(outputFilePath, JSON.stringify(jsonData, null, 4));
+
+//   console.log(`File ${outputFilePath} created successfully`);
+// }
+
+// const filePath = "data/bom.txt";
+// jsonify(filePath);
+
 function loadContent() {
-  fs.readFile("bom.json", "utf8", (err, data) => {
+  fs.readFile("data/bom.json", "utf8", (err, data) => {
     if (err) {
       console.error("Error reading chat history:", err);
       return;
@@ -69,7 +91,8 @@ async function main(text, res) {
     loadedContext.push({
       role: "user",
       content:
-        text + ". Keep the response brief and use the preloaded JSON data.",
+        text +
+        ". Keep the response brief and use the preloaded JSON data. Also, respond in whatever language the user wrote in.",
     });
 
     // Generate a completion based on the chat history
@@ -97,7 +120,7 @@ async function main(text, res) {
     messagesLDS.push({ role: "user", content: text });
     messagesLDS.push({ role: "assistant", content: completedTextLDS });
 
-    console.log("LDS VERSION " + completedTextLDS);
+    console.log("Secular Version: " + completedText);
 
     const mp3 = await openai.audio.speech.create({
       model: "tts-1",
@@ -121,7 +144,7 @@ async function main(text, res) {
 
     // Define the payload for the other server
     const payload = JSON.stringify({
-      text: completedText,
+      text: completedTextLDS,
       translation: englishText,
       audio: buffer.toString("base64"), // Encode buffer to base64 for sending
     });
