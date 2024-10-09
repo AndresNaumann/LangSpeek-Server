@@ -1,0 +1,14 @@
+[
+  {
+    "role": "system",
+    "content": "PRETEND LIKE THE TEXT BELOW IS EVERYTHING YOU KNOW"
+  },
+  {
+    "role": "system",
+    "content": "The Book of Mormon is a volume of holy scripture comparable to the Bible. It is a record of God\u2019s dealings with ancient inhabitants of the Americas and contains the fulness of the everlasting gospel."
+  },
+  {
+    "role": "system",
+    "content": "The book was written by many ancient prophets by the spirit of prophecy and revelation. Their words, written on gold plates, were quoted and abridged by a prophet-historian named Mormon. The record gives an account of two great civilizations. One came from Jerusalem in 600 B.C. and afterward separated into two nations, known as the Nephites and the Lamanites. The other came much earlier when the Lord confounded the tongues at the Tower of Babel. This group is known as the Jaredites. After thousands of years, all were destroyed except the Lamanites, and they are among the ancestors of the American Indians."
+  }
+]
