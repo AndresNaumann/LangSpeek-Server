@@ -1,20 +1,32 @@
-// firebaseAdmin.js
 import { initializeApp, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import fs from "fs";
 import path from "path";
-// import serviceAccount from "./serviceaccountkey.json" assert { type: "json" }; // Adjust the path
-const __filename = new URL(import.meta.url).pathname;
+import { fileURLToPath } from "url";  // Needed to work with import.meta.url
+
+// Get the correct path for __dirname
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Use path to construct the correct path to the JSON file
-const serviceAccountPath = path.join(__dirname, "serviceaccountkey.json");
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8")); // Read and parse JSON
+// Construct the path to the service account JSON file
+const serviceAccountPath = path.resolve(__dirname, "serviceaccountkey.json");
 
+// Read and parse the JSON file for Firebase credentials
+let serviceAccount;
+try {
+  serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+} catch (error) {
+  console.error(`Error reading service account key from ${serviceAccountPath}:`, error);
+  process.exit(1);  // Exit the process if the file cannot be read
+}
+
+// Initialize Firebase Admin app
 const app = initializeApp({
   credential: cert(serviceAccount),
 });
 
+// Get the Firebase Admin authentication object
 const admin = getAuth(app);
 
-export default admin; // Default export
+// Export the Firebase Admin auth object as the default export
+export default admin;
